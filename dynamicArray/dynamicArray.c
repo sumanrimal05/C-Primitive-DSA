@@ -1,26 +1,15 @@
-#include<stdio.h>
-#include <stdlib.h>
+#include "dynamicArray.h"
 
-#define INITIAL_CAPACITY 2
+//allocation the capacity for 2 integer variable or 8 bytes. 
+//So,if the user only enters 2 integer, we don't have to resize it. 
+//This value is just a consideration and oother values can be used based on the type of data we havev.
+#define INITIAL_CAPACITY 2    
+
+// Threshold constant for load factor
+// Load factor is used to determine how full the array is
+// we are defining these threshold as for expansion the array should be filled 75% and vice-versa.
 #define LOAD_FACTOR_THRESHOLD_EXPAND 0.75
 #define LOAD_FACTOR_THRESHOLD_SHRINK 0.2
-
-
-typedef struct {
-  int* data;
-  int capacity;   // Size of array
-  int size;       // Number of elements
-  float loadFactor; // Determines how full the array is
-}DynamicArray;
-
-//Function prototypes
-void calculateLoadFactor(DynamicArray* dArr);
-void arrayInitialize(DynamicArray* dArr);
-void arraySizeShrink(DynamicArray *dArr);
-void arraySizeExtend(DynamicArray *dArr);
-void arrayAddElement(DynamicArray *dArr, int value);
-void arrayRemoveLast(DynamicArray* dArr);
-void freeDynamicArray(DynamicArray* dArr);
 
 void calculateLoadFactor(DynamicArray* dArr){
   // Inorder to avoid dividing by zero
@@ -31,6 +20,7 @@ void calculateLoadFactor(DynamicArray* dArr){
 
 }
 
+//Initialize the dynamic array with initial capacity of 2
 void arrayInitialize(DynamicArray* dArr){
   //Initialize the capacity to be 2
   dArr->capacity = 2;
@@ -43,6 +33,7 @@ void arrayInitialize(DynamicArray* dArr){
   }
 }
 
+// Dynamically Shrink Array size
 void arraySizeShrink(DynamicArray *dArr){
   dArr-> capacity /= 2;
   // We don't want to shrink the array Size below 1 as it may cause error
@@ -58,6 +49,7 @@ void arraySizeShrink(DynamicArray *dArr){
   }
 }
 
+// Dynamically increase array size
 void arraySizeExtend(DynamicArray *dArr){
   dArr->capacity *= 2; //Double the capacity to reduce frequent reallocation
   dArr->data = (int*) realloc(dArr->data, dArr->capacity * sizeof(int));
@@ -67,6 +59,7 @@ void arraySizeExtend(DynamicArray *dArr){
   }
 }
 
+// Add element to the last index of the array
 void arrayAddElement(DynamicArray *dArr, int value){
   //Before adding elements. Let's calculate the loadFactor.
   // So that we can know if we need to extend the array or not
@@ -79,9 +72,11 @@ void arrayAddElement(DynamicArray *dArr, int value){
   dArr->size++;
 }
 
+// Once you decleare an array. You cannot change it's size without using realloc
+// So it is not efficient to reduct the size of array every time we remove the last element
+// SO here we are just reducing the array size logically. Actually the array size is same. But we changed the last index value only
+// If only the threshod is met only we reduct the size of arr.
 void arrayRemoveLast(DynamicArray* dArr){
-
-
   // Check if there is element in the array
   if(dArr->size == 0){
     printf("Array Empty. Cannot remove element\n");
@@ -100,6 +95,7 @@ void arrayRemoveLast(DynamicArray* dArr){
 
 }
 
+// Free array memory allocation
 void freeDynamicArray(DynamicArray* dArr){
   free(dArr->data);   //Free the data array
   dArr->data = NULL; //Setting pointer to NULL to prevent dangling pointer
@@ -111,25 +107,3 @@ void freeDynamicArray(DynamicArray* dArr){
 
 
 
-int main(){
-
-  DynamicArray myArray;
-
-  //Initialize the array
-  arrayInitialize(&myArray);
-
-  for(int i = 0; i<=10; i++){
-    arrayAddElement(&myArray, i);
-    printf("Added %d: Size =%d, Capacity =%d, Load Factor =%.2f\n", i,myArray.size, myArray.capacity, myArray.loadFactor);
-  }
-
-  // Remove last three elements
-  for(int i=0; i<9; i++){
-    arrayRemoveLast(&myArray);
-    printf("Removed %d: Size =%d, Capacity =%d, Load Factor =%.2f\n", i,myArray.size, myArray.capacity, myArray.loadFactor);
-  }
-
-  freeDynamicArray(&myArray);
-
-  return 0;
-}

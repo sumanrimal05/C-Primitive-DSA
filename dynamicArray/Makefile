@@ -5,7 +5,10 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files
-SRCS = dynamicArray.c
+SRCS = main.c dynamicArray.c
+
+# Object files (compiling each source file to an object file)
+OBJS = $(SRCS:.c=.o)
 
 # Output executable
 TARGET = dynamicArray
@@ -14,9 +17,13 @@ TARGET = dynamicArray
 all: $(TARGET)
 
 # Rule to build the target
-$(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
-# Clean rule to remove the executable
+# Rule to compile source files into object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean rule to remove the executable and object files
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) $(OBJS)

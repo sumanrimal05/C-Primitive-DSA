@@ -1,13 +1,13 @@
 #include "dynamicArray.h"
 
-//allocation the capacity for 2 integer variable or 8 bytes. 
-//So,if the user only enters 2 integer, we don't have to resize it. 
-//This value is just a consideration and oother values can be used based on the type of data we havev.
+//Initial Array Capacity for 2 integer size or 8 bytes. 
+// So,if the user only enters 2 integer, we don't have to resize it. 
+//Defining the initial capacity as per the user need is Recommended
 #define INITIAL_CAPACITY 2    
 
 // Threshold constant for load factor
-// Load factor is used to determine how full the array is
-// we are defining these threshold as for expansion the array should be filled 75% and vice-versa.
+// Load factor is used to determine how filled the array is
+// Defining these threshold as: for expansion the array should be filled 75% and vice-versa.
 #define LOAD_FACTOR_THRESHOLD_EXPAND 0.75
 #define LOAD_FACTOR_THRESHOLD_SHRINK 0.2
 

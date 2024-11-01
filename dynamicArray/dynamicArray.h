@@ -9,7 +9,7 @@ typedef struct {
   int* data;
   int capacity;   // Size of array
   int size;       // Number of elements
-  float loadFactor; // Determines how full the array is
+  float loadFactor; // Determines how filled the array is
 }DynamicArray;
 
 //Function prototypes
